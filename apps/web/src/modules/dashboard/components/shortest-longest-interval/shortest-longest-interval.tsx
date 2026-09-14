@@ -37,7 +37,7 @@ export const ShortestLongestInterval = () => {
               movie.producer,
               String(movie.interval),
               String(movie.previousWin),
-              String(movie.previousWin),
+              String(movie.followingWin),
             ]}
             className="last:border-b-0 grid-cols-[258px_96px_160px_160px]"
           />
@@ -59,7 +59,7 @@ export const ShortestLongestInterval = () => {
               movie.producer,
               String(movie.interval),
               String(movie.previousWin),
-              String(movie.previousWin),
+              String(movie.followingWin),
             ]}
             className="last:border-b-0 grid-cols-[258px_96px_160px_160px]"
           />

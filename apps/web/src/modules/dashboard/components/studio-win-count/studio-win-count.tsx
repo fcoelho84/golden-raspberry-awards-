@@ -8,7 +8,7 @@ export const StudioWinCount = () => {
     return (
       <div className="max-w-fit border border-slate-200 rounded-md overflow-hidden">
         <TableList
-          columns={['Year', 'Win Count']}
+          columns={['Name', 'Win Count']}
           className="font-bold bg-white grid-cols-[256px_128px]"
         />
         <Loader />
@@ -23,7 +23,7 @@ export const StudioWinCount = () => {
       <h2 className="font-bold">Top 3 studios with winners</h2>
       <div className="max-w-fit border border-slate-200 rounded-md overflow-hidden">
         <TableList
-          columns={['Year', 'Win Count']}
+          columns={['Name', 'Win Count']}
           className="font-bold bg-white grid-cols-[256px_128px]"
         />
         {data.slice(0, 3).map((studio, i) => (

@@ -42,12 +42,10 @@ describe('List Component', () => {
     expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
 
     mockMovies.forEach((movie) => {
-      ;(expect(screen.getByText(movie.id)).toBeInTheDocument(),
-        expect(screen.getByText(movie.year)).toBeInTheDocument(),
-        expect(screen.getByText(movie.title)).toBeInTheDocument(),
-        expect(
-          screen.getByText(movie.winner ? 'Yes' : 'No'),
-        ).toBeInTheDocument())
+      expect(screen.getByText(movie.id)).toBeInTheDocument()
+      expect(screen.getByText(movie.year)).toBeInTheDocument()
+      expect(screen.getByText(movie.title)).toBeInTheDocument()
+      expect(screen.getByText(movie.winner ? 'Yes' : 'No')).toBeInTheDocument()
     })
   })
 

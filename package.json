@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "turbo dev --ui=tui",
     "build": "turbo build",
-    "test": "turbo test",
+    "test": "turbo test --filter=web",
     "test:e2e": "turbo test --filter=api"
   },
   "keywords": [],
