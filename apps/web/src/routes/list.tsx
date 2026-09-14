@@ -1,6 +1,6 @@
-import { ListFilters } from '#/fatures/movie-list/components/list-filters/list-filters'
-import { ListNavigation } from '#/fatures/movie-list/components/list-navigation/list-navigation'
-import { List } from '#/fatures/movie-list/components/list/list'
+import { ListFilters } from '#/modules/movie-list/components/list-filters/list-filters'
+import { ListNavigation } from '#/modules/movie-list/components/list-navigation/list-navigation'
+import { List } from '#/modules/movie-list/components/list/list'
 import { createFileRoute } from '@tanstack/react-router'
 
 const RouteComponent = () => {

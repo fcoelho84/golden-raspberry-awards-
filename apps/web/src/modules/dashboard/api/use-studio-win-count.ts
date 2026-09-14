@@ -1,6 +1,7 @@
 import { GET } from '#/shared/api/api'
 import { useQuery } from '@tanstack/react-query'
 import type { AxiosResponse } from 'axios'
+
 export interface StudiosWinCount {
   name: string
   winCount: number

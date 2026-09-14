@@ -1,5 +1,5 @@
 import { GET } from '#/shared/api/api'
-import type { Movie } from '#/fatures/movie-list/api/use-movies'
+import type { Movie } from '#/modules/movie-list/api/use-movies'
 import { useQuery } from '@tanstack/react-query'
 import { useSearch } from '@tanstack/react-router'
 import type { AxiosResponse } from 'axios'

@@ -13,8 +13,8 @@ export const ShortestLongestInterval = () => {
     )
   }
 
-  const min = response.data?.data?.min || []
-  const max = response.data?.data?.min || []
+  const min = response.data?.data.min || []
+  const max = response.data?.data.min || []
 
   return (
     <div className="flex gap-2 flex-col">

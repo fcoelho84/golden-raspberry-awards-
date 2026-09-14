@@ -1,7 +1,7 @@
-import { MovieWinCount } from '#/fatures/dashboard/components/movie-win-count/movie-win-count'
-import { SearchByYear } from '#/fatures/dashboard/components/search-by-year/search-by-year'
-import { ShortestLongestInterval } from '#/fatures/dashboard/components/shortest-longest-interval/shortest-longest-interval'
-import { StudioWinCount } from '#/fatures/dashboard/components/studio-win-count/studio-win-count'
+import { MovieWinCount } from '#/modules/dashboard/components/movie-win-count/movie-win-count'
+import { SearchByYear } from '#/modules/dashboard/components/search-by-year/search-by-year'
+import { ShortestLongestInterval } from '#/modules/dashboard/components/shortest-longest-interval/shortest-longest-interval'
+import { StudioWinCount } from '#/modules/dashboard/components/studio-win-count/studio-win-count'
 import { createFileRoute } from '@tanstack/react-router'
 
 function RouteComponent() {

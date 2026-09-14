@@ -17,7 +17,7 @@ export const List = () => {
     )
   }
 
-  const data = response?.data?.data.content || []
+  const data = response.data?.data.content || []
 
   return (
     <div className="min-w-full border border-slate-200 rounded-md overflow-hidden">
