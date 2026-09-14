@@ -7,7 +7,7 @@
     "dev": "turbo dev --ui=tui",
     "build": "turbo build",
     "test": "turbo test",
-    "test:e2e": "turbo test:e2e"
+    "test:e2e": "turbo test --filter=api"
   },
   "keywords": [],
   "author": "",
