@@ -1,75 +1,65 @@
-# React + TypeScript + Vite
+## 📂 Estrutura de Pastas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```text
+.
+├── src/
+│   ├── modules/                 # Módulos de domínio da aplicação
+│   │   └── [module-name]/       # Módulo específico (ex: dashboard, movie-list)
+│   │       ├── api/             # Requisições e queries específicas do módulo
+│   │       └── components/      # Componentes exclusivos do módulo
+│   │
+│   ├── routes/                  # Rotas gerenciadas pelo TanStack Router (File-based Routing)
+│   │   ├── __root.tsx           # Layout raiz global e provedores de contexto
+│   │   └── [route-name].tsx     # Páginas/rotas da aplicação (ex: index.tsx, list.tsx)
+│   │
+│   ├── shared/                  # Recursos utilitários compartilhados entre módulos
+│   │   ├── api/                 # Cliente HTTP base (Axios) e configurações globais
+│   │   ├── hooks/               # Custom hooks globais e reutilizáveis
+│   │   └── ui/                  # Design System / Componentes genéricos de UI (Botões, Modais, Inputs)
+│   │
+│   ├── test/                    # Configurações de testes, mocks e utilitários
+│   ├── main.css                 # Estilos globais e diretivas do Tailwind CSS
+│   ├── main.tsx                 # Ponto de entrada (entry point) da aplicação React
+│   ├── router.tsx               # Configuração da instância do TanStack Router
+│   └── routeTree.gen.ts         # Árvore de rotas gerada automaticamente pelo TanStack Router
+│
+├── .gitignore                   # Arquivos ignorados pelo Git
+├── .prettierignore              # Arquivos ignorados pelo Prettier
+├── eslint.config.js             # Configurações do ESLint (Flat Config)
+├── index.html                   # HTML base da aplicação
+├── package.json                 # Dependências e scripts do projeto
+└── pnpm-lock.yaml               # Trava de versões das dependências (pnpm)
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠️ Tecnologias Utilizadas
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### **Core & Estilização**
 
-```
+- **[React](https://react.dev/)** — Componentes feitos em React.
+- **[TypeScript](https://www.typescriptlang.org/)** — Para garantir as tipagens corretas.
+- **[Tailwind CSS](https://tailwindcss.com/)** — utilizamos o tailwind CSS para estilização.
+
+### **Gerenciamento de Dados & Requisições**
+
+- **[Axios](https://axios-http.com/)** — Cliente HTTP.
+- **[TanStack Query (React Query)](https://tanstack.com/query/latest)** — Gerenciamento de estado, caching e sincronização de dados.
+
+### **Roteamento**
+
+- **[TanStack Router](https://tanstack.com/router/latest)** — Para criação de routas com tipagem.
+
+### **Testes & Qualidade de Código**
+
+- **[@testing-library/jest-dom](https://testing-library.com/)** — Para testes
+- **[ESLint](https://eslint.org/)** — Linter para identificação e correção de problemas no código.
+- **[Prettier](https://prettier.io/)** — Formatador de código automatizado.
+
+## 📐 Padrões de Arquitetura
+
+1. **Arquitetura Modular (`src/modules`)**: Cada funcionalidade/domínio da aplicação fica isolado em sua própria pasta com seus próprios componentes e serviços de API. Isso reduz o acoplamento e facilita a manutenção.
+2. **Camada Compartilhada (`src/shared`)**: Componentes genéricos da interface (UI Kit), hooks utilitários e o cliente HTTP base ficam centralizados para reuso em qualquer módulo.
+3. **Roteamento Baseado em Arquivos (`src/routes`)**: As rotas são geradas automaticamente pelo TanStack Router. O arquivo `routeTree.gen.ts` é gerado automaticamente durante o desenvolvimento — **não edite este arquivo manualmente**.
+
+---
