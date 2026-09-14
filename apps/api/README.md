@@ -19,7 +19,7 @@ No momento da inicialização, a aplicação realiza a leitura dos dados a parti
 Retorna o produtor com o maior intervalo entre dois prêmios consecutivos e o produtor que obteve dois prêmios mais rápido.
 
 - **Método:** `GET`
-- **URL:** `http://localhost:3000/producers/awards-interval`
+- **URL:** `http://localhost:3001/producers/awards-interval`
 
 ---
 
