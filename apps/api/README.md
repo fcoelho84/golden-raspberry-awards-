@@ -1,34 +1,60 @@
-# 🏆 Golden Raspberry Awards (API)
+# Golden Raspberry Awards (API)
 
-No momento da inicialização, a aplicação realiza a leitura dos dados a partir de um arquivo CSV, persiste os registros em um banco de dados em memória e disponibiliza endpoints HTTP para consulta dos produtores com maior e menor intervalo entre prêmios consecutivos.
+No boot, a aplicação lê o CSV de filmes, persiste os registros em SQLite em memória e expõe HTTP para consultar produtores com maior e menor intervalo entre prêmios consecutivos.
 
----
+Onboarding do monorepo: [README raiz](../../README.md).
 
-## 🛠️ Tecnologias e Decisões de Arquitetura
+## Stack
 
-- **[NestJS](https://nestjs.org/):** Framework escolhido por sua arquitetura modularizada, suporte nativo a TypeScript, injeção de dependências e padronização do código, evitando configurações manuais e _boilerplates_ desnecessários.
-- **SQLite (Em Memória):** Banco de dados embarcado utilizado para garantir que a aplicação rode instantaneamente sem a necessidade de instalações ou serviços externos adicionais.
-- **`csv-parser`:** Escolhido para dar mais confiabilidade na leitura do arquivo CSV e permitir foco total na regra de negócio da aplicação.
+- [NestJS](https://nestjs.org/) — módulos, DI, TypeScript
+- SQLite em memória (`better-sqlite3`) — sem SGBD externo
+- `csv-parser` — leitura do arquivo padrão
 
----
+## Endpoint
 
-## 📍 Endpoints da API
+| Método | URL |
+|--------|-----|
+| `GET` | `http://localhost:3001/producers/awards-interval` |
 
-### **Consultar intervalo de prêmios dos produtores**
+Resposta: `{ min: [...], max: [...] }` com `producer`, `interval`, `previousWin`, `followingWin`.
 
-Retorna o produtor com o maior intervalo entre dois prêmios consecutivos e o produtor que obteve dois prêmios mais rápido.
+Porta: `process.env.PORT` ou `3001`.
 
-- **Método:** `GET`
-- **URL:** `http://localhost:3001/producers/awards-interval`
-
----
-
-## 📁 Fonte de Dados (CSV)
-
-Os dados iniciais da aplicação são carregados a partir do arquivo CSV localizado no seguinte caminho:
+## Fonte de dados
 
 ```text
 src/database/Movielist.csv
 ```
 
-> **Nota:** Caso deseje alterar os dados ou adicionar novos filmes e produtores para teste, basta modificar o arquivo `Movielist.csv` acima antes de iniciar a aplicação.
+O teste e2e de dados padrões compara o JSON completo de `/producers/awards-interval` com o resultado desse arquivo. Se o CSV mudar o resultado, o teste falha.
+
+## Comandos
+
+Na raiz do monorepo:
+
+```bash
+pnpm install
+pnpm dev --filter=api
+pnpm test:e2e
+```
+
+Dentro de `apps/api`:
+
+```bash
+pnpm dev          # nest start --watch
+pnpm start
+pnpm build
+pnpm prod         # node dist/main
+pnpm test         # e2e (vitest.config.e2e.ts)
+pnpm test:unit
+pnpm lint         # oxlint
+pnpm format
+```
+
+Testes em `test/**/*.e2e-spec.ts`.
+
+## Documentação relacionada
+
+- [docs/AI_INTERACTIONS.md](../../docs/AI_INTERACTIONS.md)
+- [docs/plans/](../../docs/plans/)
+- [openspec/changes/fix-evaluation-issues/](../../openspec/changes/fix-evaluation-issues/)
