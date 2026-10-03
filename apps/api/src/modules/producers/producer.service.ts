@@ -16,31 +16,41 @@ export class ProducerService {
       };
     }
 
-    const dtos: ProducerAwardIntervalDto[] = consecutiveWinners.flatMap(
-      (producer) => {
-        const intervals: ProducerAwardIntervalDto[] = [];
+    let minIntervalValue = Number.POSITIVE_INFINITY;
+    let maxIntervalValue = Number.NEGATIVE_INFINITY;
 
-        for (let i = 0; i < producer.movies.length - 1; i++) {
-          const previousWin = producer.movies[i].year;
-          const followingWin = producer.movies[i + 1].year;
+    const min: ProducerAwardIntervalDto[] = [];
+    const max: ProducerAwardIntervalDto[] = [];
 
-          intervals.push({
-            producer: producer.name,
-            interval: followingWin - previousWin,
-            previousWin,
-            followingWin,
-          });
+    for (const producer of consecutiveWinners) {
+      for (let i = 0; i < producer.movies.length - 1; i++) {
+        const previousWin = producer.movies[i].year;
+        const followingWin = producer.movies[i + 1].year;
+        const interval = followingWin - previousWin;
+        const dto: ProducerAwardIntervalDto = {
+          producer: producer.name,
+          interval,
+          previousWin,
+          followingWin,
+        };
+
+        if (interval < minIntervalValue) {
+          minIntervalValue = interval;
+          min.length = 0;
+          min.push(dto);
+        } else if (interval === minIntervalValue) {
+          min.push(dto);
         }
 
-        return intervals;
-      },
-    );
-
-    const minIntervalValue = Math.min(...dtos.map((item) => item.interval));
-    const maxIntervalValue = Math.max(...dtos.map((item) => item.interval));
-
-    const min = dtos.filter((item) => item.interval === minIntervalValue);
-    const max = dtos.filter((item) => item.interval === maxIntervalValue);
+        if (interval > maxIntervalValue) {
+          maxIntervalValue = interval;
+          max.length = 0;
+          max.push(dto);
+        } else if (interval === maxIntervalValue) {
+          max.push(dto);
+        }
+      }
+    }
 
     return {
       min,

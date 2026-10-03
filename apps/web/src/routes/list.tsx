@@ -16,9 +16,25 @@ const RouteComponent = () => {
 export const Route = createFileRoute('/list')({
   component: RouteComponent,
   validateSearch: (search) => {
-    return {
-      page: search.page || 1,
-      size: search.size || 10,
+    const page = Number(search.page)
+    const size = Number(search.size)
+    const year = Number(search.year)
+    const validated: {
+      page: number
+      size: number
+      year?: number
+      winner?: boolean
+    } = {
+      page: Number.isInteger(page) && page >= 0 ? page : 0,
+      size: Number.isInteger(size) && size > 0 ? size : 10,
     }
+
+    if (Number.isInteger(year)) validated.year = year
+    if (search.winner === true || search.winner === 'true') validated.winner = true
+    if (search.winner === false || search.winner === 'false') {
+      validated.winner = false
+    }
+
+    return validated
   },
 })

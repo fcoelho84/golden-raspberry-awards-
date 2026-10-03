@@ -59,7 +59,7 @@ describe('ProducerController', () => {
   });
 
   describe('Teste com dados padrões', () => {
-    it('deve respeitar a estrutura do contrato da API e validar as tipagens', async () => {
+    it('deve retornar o resultado completo calculado a partir do arquivo padrão', async () => {
       const moduleRef = await Test.createTestingModule({
         imports: [AppModule],
       }).compile();
@@ -71,16 +71,23 @@ describe('ProducerController', () => {
         .get('/producers/awards-interval')
         .expect(200);
 
-      expect(Array.isArray(response.body.min)).toBe(true);
-      expect(Array.isArray(response.body.max)).toBe(true);
-
-      const allRecords = [...response.body.min, ...response.body.max];
-      allRecords.forEach((record) => {
-        expect(typeof record.producer).toBe('string');
-        expect(typeof record.interval).toBe('number');
-        expect(typeof record.previousWin).toBe('number');
-        expect(typeof record.followingWin).toBe('number');
-        expect(record.followingWin - record.previousWin).toBe(record.interval);
+      expect(response.body).toEqual({
+        min: [
+          {
+            producer: 'Joel Silver',
+            interval: 1,
+            previousWin: 1990,
+            followingWin: 1991,
+          },
+        ],
+        max: [
+          {
+            producer: 'Matthew Vaughn',
+            interval: 13,
+            previousWin: 2002,
+            followingWin: 2015,
+          },
+        ],
       });
     });
   });

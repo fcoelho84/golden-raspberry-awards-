@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { it, expect, vi, describe } from 'vitest'
 import { useShortestLongestInterval } from '../../api/use-shortest-longest-interval'
 import type { Interval } from '../../api/use-shortest-longest-interval'
@@ -8,11 +8,25 @@ vi.mock('../../api/use-shortest-longest-interval', () => ({
   useShortestLongestInterval: vi.fn(),
 }))
 
-const mockMovies = {
-  producer: 'A',
+const minimumInterval = {
+  producer: 'Joel Silver',
   interval: 1,
-  previousWin: 2000,
-  followingWin: 2001,
+  previousWin: 1990,
+  followingWin: 1991,
+}
+
+const maximumInterval = {
+  producer: 'Matthew Vaughn',
+  interval: 13,
+  previousWin: 2002,
+  followingWin: 2015,
+}
+
+const section = (name: string) => {
+  const heading = screen.getByRole('heading', { name })
+  const table = heading.nextElementSibling
+  if (!table) throw new Error(`Seção ${name} sem conteúdo`)
+  return within(table as HTMLElement)
 }
 
 describe('ShortestLongestInterval Component', () => {
@@ -27,26 +41,29 @@ describe('ShortestLongestInterval Component', () => {
     expect(screen.getByTestId('loader')).toBeInTheDocument()
   })
 
-  it('deve renderizar a lista de conteúdos', () => {
+  it('deve renderizar maximum e minimum com produtores distintos', () => {
     vi.mocked(useShortestLongestInterval).mockReturnValue({
       isLoading: false,
       data: {
         data: {
-          max: [mockMovies],
-          min: [mockMovies],
+          max: [maximumInterval],
+          min: [minimumInterval],
         },
       },
     } as ReturnType<typeof useShortestLongestInterval>)
 
     render(<ShortestLongestInterval />)
 
-    expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
-    expect(screen.queryAllByText(mockMovies.producer)[0]).toBeInTheDocument()
-    expect(screen.queryAllByText(mockMovies.interval)[0]).toBeInTheDocument()
-    expect(screen.queryAllByText(mockMovies.previousWin)[0]).toBeInTheDocument()
-    expect(
-      screen.queryAllByText(mockMovies.followingWin)[0],
-    ).toBeInTheDocument()
+    const maximum = section('Maximum')
+    const minimum = section('Minimum')
+
+    expect(maximum.getByText(maximumInterval.producer)).toBeInTheDocument()
+    expect(maximum.getByText(String(maximumInterval.interval))).toBeInTheDocument()
+    expect(maximum.queryByText(minimumInterval.producer)).not.toBeInTheDocument()
+
+    expect(minimum.getByText(minimumInterval.producer)).toBeInTheDocument()
+    expect(minimum.getByText(String(minimumInterval.interval))).toBeInTheDocument()
+    expect(minimum.queryByText(maximumInterval.producer)).not.toBeInTheDocument()
   })
 
   it('deve renderizar a lista de conteúdos vazia', () => {

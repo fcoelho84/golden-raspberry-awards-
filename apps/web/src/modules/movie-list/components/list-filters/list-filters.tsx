@@ -14,7 +14,7 @@ export const ListFilters = () => {
 
   const handleFilter = (params: Params) => {
     navigate({
-      search: (prev) => ({ page: 1, size: prev.size, ...params }),
+      search: (prev) => ({ ...prev, page: 0, ...params }),
     })
   }
 

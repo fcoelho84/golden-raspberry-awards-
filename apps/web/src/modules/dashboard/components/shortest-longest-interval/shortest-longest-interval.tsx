@@ -14,7 +14,7 @@ export const ShortestLongestInterval = () => {
   }
 
   const min = response.data?.data.min || []
-  const max = response.data?.data.min || []
+  const max = response.data?.data.max || []
 
   return (
     <div className="flex gap-2 flex-col">
@@ -30,7 +30,7 @@ export const ShortestLongestInterval = () => {
           className="font-bold bg-white grid-cols-[258px_96px_160px_160px]"
         />
 
-        {min.map((movie, i) => (
+        {max.map((movie, i) => (
           <TableList
             key={i}
             columns={[
@@ -52,7 +52,7 @@ export const ShortestLongestInterval = () => {
           className="font-bold bg-white grid-cols-[258px_96px_160px_160px]"
         />
 
-        {max.map((movie, i) => (
+        {min.map((movie, i) => (
           <TableList
             key={i}
             columns={[

@@ -18,7 +18,7 @@ export class DatabaseSeedService implements OnApplicationBootstrap {
   }
 
   private async seedCsvData(): Promise<void> {
-    this.csvParserService.parseFile<{
+    await this.csvParserService.parseFile<{
       year: string;
       title: string;
       studios: string;

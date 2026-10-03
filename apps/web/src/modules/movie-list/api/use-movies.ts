@@ -1,8 +1,7 @@
 import { GET } from '#/shared/api/api'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useSearch } from '@tanstack/react-router'
 import type { AxiosResponse } from 'axios'
-import { useEffect } from 'react'
 
 export interface Movie {
   id: number
@@ -26,18 +25,13 @@ type QueryType = AxiosResponse<PaginatedResponse<Movie>>
 
 export const useMovies = () => {
   const params = useSearch({ from: '/list' })
-  const response = useQuery<QueryType>({
-    queryKey: ['movies'],
+  return useQuery<QueryType>({
+    queryKey: ['movies', params],
     queryFn: () => GET<PaginatedResponse<Movie>>('movies', { params }),
   })
-
-  useEffect(() => {
-    response.refetch()
-  }, [params])
-
-  return response
 }
 
 export const useCacheMovies = () => {
-  return useQueryClient().getQueryData<QueryType>(['movies'])
+  const { data } = useMovies()
+  return data
 }
