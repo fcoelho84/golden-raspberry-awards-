@@ -14,7 +14,7 @@ const mockMovies = [
 ]
 
 describe('List Component', () => {
-  it('deve exibir o loading de carregamento', () => {
+  it('mostra loader e cabeçalho sem filmes enquanto carrega', () => {
     vi.mocked(useMovies).mockReturnValue({
       isLoading: true,
       data: undefined,
@@ -25,9 +25,10 @@ describe('List Component', () => {
     expect(screen.getByTestId('loader')).toBeInTheDocument()
     expect(screen.getByText('ID')).toBeInTheDocument()
     expect(screen.queryByText('A')).not.toBeInTheDocument()
+    expect(screen.queryByText('B')).not.toBeInTheDocument()
   })
 
-  it('deve renderizar a lista de conteúdos', () => {
+  it('renderiza os filmes retornados pela API', () => {
     vi.mocked(useMovies).mockReturnValue({
       isLoading: false,
       data: {
@@ -42,14 +43,14 @@ describe('List Component', () => {
     expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
 
     mockMovies.forEach((movie) => {
-      expect(screen.getByText(movie.id)).toBeInTheDocument()
-      expect(screen.getByText(movie.year)).toBeInTheDocument()
+      expect(screen.getByText(String(movie.id))).toBeInTheDocument()
+      expect(screen.getByText(String(movie.year))).toBeInTheDocument()
       expect(screen.getByText(movie.title)).toBeInTheDocument()
       expect(screen.getByText(movie.winner ? 'Yes' : 'No')).toBeInTheDocument()
     })
   })
 
-  it('deve renderizar a lista de conteúdos vazia', () => {
+  it('mostra só o cabeçalho quando a lista está vazia', () => {
     vi.mocked(useMovies).mockReturnValue({
       isLoading: false,
       data: {
@@ -63,5 +64,7 @@ describe('List Component', () => {
 
     expect(screen.getByText('ID')).toBeInTheDocument()
     expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
+    expect(screen.queryByText('1')).not.toBeInTheDocument()
+    expect(screen.queryByText('A')).not.toBeInTheDocument()
   })
 })

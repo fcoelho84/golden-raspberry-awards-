@@ -71,6 +71,17 @@ describe('ProducerController', () => {
         .get('/producers/awards-interval')
         .expect(200);
 
+      expect(Array.isArray(response.body.min)).toBe(true);
+      expect(Array.isArray(response.body.max)).toBe(true);
+
+      const allRecords = [...response.body.min, ...response.body.max];
+      allRecords.forEach((record) => {
+        expect(Object.keys(record).sort()).toEqual(
+          ['followingWin', 'interval', 'previousWin', 'producer'].sort(),
+        );
+        expect(record.followingWin - record.previousWin).toBe(record.interval);
+      });
+
       expect(response.body).toEqual({
         min: [
           {
@@ -139,14 +150,15 @@ describe('ProducerController', () => {
         .get('/producers/awards-interval')
         .expect(200);
 
-      expect(response.body.min).toEqual([
-        {
-          producer: 'Producer C',
-          interval: 10,
-          previousWin: 2005,
-          followingWin: 2015,
-        },
-      ]);
+      const singleInterval = {
+        producer: 'Producer C',
+        interval: 10,
+        previousWin: 2005,
+        followingWin: 2015,
+      };
+
+      expect(response.body.min).toEqual([singleInterval]);
+      expect(response.body.max).toEqual([singleInterval]);
     });
 
     it('deve retornar múltiplos produtores nos arrays "min" e "max" quando houver empates de intervalo', async () => {
@@ -326,6 +338,112 @@ describe('ProducerController', () => {
 
       expect(response.body.min).toEqual([]);
       expect(response.body.max).toEqual([]);
+    });
+
+    it('deve ignorar linhas inválidas e calcular apenas as vitórias válidas', async () => {
+      const mixedCsv = [
+        'year;title;studios;producers;winner',
+        'INVALID;Bad Year;Studio A;Producer Valid;yes',
+        '1980;;Studio A;Producer Valid;yes',
+        '1980;Skipped No;Studio A;Producer Valid;no',
+        '1985;Valid One;Studio A;Producer Valid;yes',
+        '1990;Valid Two;Studio A;Producer Valid;yes',
+      ].join('\n');
+
+      app = await setupTestAppWithCsvContent(mixedCsv);
+
+      const response = await request(app.getHttpServer())
+        .get('/producers/awards-interval')
+        .expect(200);
+
+      expect(response.body).toEqual({
+        min: [
+          {
+            producer: 'Producer Valid',
+            interval: 5,
+            previousWin: 1985,
+            followingWin: 1990,
+          },
+        ],
+        max: [
+          {
+            producer: 'Producer Valid',
+            interval: 5,
+            previousWin: 1985,
+            followingWin: 1990,
+          },
+        ],
+      });
+    });
+
+    it('deve ignorar linhas com producers vazio e manter o intervalo do produtor válido', async () => {
+      const emptyProducersCsv = [
+        'year;title;studios;producers;winner',
+        '1980;Orphan;Studio A;;yes',
+        '1981;Orphan Two;Studio A;   ;yes',
+        '1990;Valid One;Studio B;Producer Keep;yes',
+        '1995;Valid Two;Studio B;Producer Keep;yes',
+      ].join('\n');
+
+      app = await setupTestAppWithCsvContent(emptyProducersCsv);
+
+      const response = await request(app.getHttpServer())
+        .get('/producers/awards-interval')
+        .expect(200);
+
+      expect(response.body).toEqual({
+        min: [
+          {
+            producer: 'Producer Keep',
+            interval: 5,
+            previousWin: 1990,
+            followingWin: 1995,
+          },
+        ],
+        max: [
+          {
+            producer: 'Producer Keep',
+            interval: 5,
+            previousWin: 1990,
+            followingWin: 1995,
+          },
+        ],
+      });
+    });
+
+    it('deve considerar apenas anos com winner yes no cálculo do intervalo', async () => {
+      const interleavedCsv = [
+        'year;title;studios;producers;winner',
+        '1980;Win;Studio A;Producer Mix;yes',
+        '1982;Not Win;Studio A;Producer Mix;no',
+        '1985;Also Not;Studio A;Producer Mix;',
+        '1990;Win Again;Studio A;Producer Mix;yes',
+      ].join('\n');
+
+      app = await setupTestAppWithCsvContent(interleavedCsv);
+
+      const response = await request(app.getHttpServer())
+        .get('/producers/awards-interval')
+        .expect(200);
+
+      expect(response.body).toEqual({
+        min: [
+          {
+            producer: 'Producer Mix',
+            interval: 10,
+            previousWin: 1980,
+            followingWin: 1990,
+          },
+        ],
+        max: [
+          {
+            producer: 'Producer Mix',
+            interval: 10,
+            previousWin: 1980,
+            followingWin: 1990,
+          },
+        ],
+      });
     });
   });
 });

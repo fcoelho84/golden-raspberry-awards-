@@ -30,7 +30,7 @@ const section = (name: string) => {
 }
 
 describe('ShortestLongestInterval Component', () => {
-  it('deve exibir o loading de carregamento', () => {
+  it('mostra loader enquanto carrega', () => {
     vi.mocked(useShortestLongestInterval).mockReturnValue({
       isLoading: true,
       data: undefined,
@@ -39,9 +39,10 @@ describe('ShortestLongestInterval Component', () => {
     render(<ShortestLongestInterval />)
 
     expect(screen.getByTestId('loader')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Maximum' })).not.toBeInTheDocument()
   })
 
-  it('deve renderizar maximum e minimum com produtores distintos', () => {
+  it('mostra Maximum e Minimum com produtores distintos', () => {
     vi.mocked(useShortestLongestInterval).mockReturnValue({
       isLoading: false,
       data: {
@@ -66,7 +67,7 @@ describe('ShortestLongestInterval Component', () => {
     expect(minimum.queryByText(maximumInterval.producer)).not.toBeInTheDocument()
   })
 
-  it('deve renderizar a lista de conteúdos vazia', () => {
+  it('mostra cabeçalhos sem linhas de produtor quando min e max estão vazios', () => {
     vi.mocked(useShortestLongestInterval).mockReturnValue({
       isLoading: false,
       data: {
@@ -79,10 +80,10 @@ describe('ShortestLongestInterval Component', () => {
 
     render(<ShortestLongestInterval />)
 
-    expect(screen.queryAllByText('Producer')[0]).toBeInTheDocument()
-    expect(screen.queryAllByText('Interval')[0]).toBeInTheDocument()
-    expect(screen.queryAllByText('Previous year')[0]).toBeInTheDocument()
-    expect(screen.queryAllByText('Following year')[0]).toBeInTheDocument()
     expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
+    expect(section('Maximum').getByText('Producer')).toBeInTheDocument()
+    expect(section('Minimum').getByText('Producer')).toBeInTheDocument()
+    expect(screen.queryByText(minimumInterval.producer)).not.toBeInTheDocument()
+    expect(screen.queryByText(maximumInterval.producer)).not.toBeInTheDocument()
   })
 })

@@ -14,7 +14,7 @@ const mockMovies = [
 ]
 
 describe('MovieWinCount Component', () => {
-  it('deve exibir o loading de carregamento', () => {
+  it('mostra loader sem anos enquanto carrega', () => {
     vi.mocked(useMovieWinCount).mockReturnValue({
       isLoading: true,
       data: undefined,
@@ -23,11 +23,11 @@ describe('MovieWinCount Component', () => {
     render(<MovieWinCount />)
 
     expect(screen.getByTestId('loader')).toBeInTheDocument()
-    expect(screen.getByText('Year')).toBeInTheDocument()
-    expect(screen.queryByText('Win Count')).toBeInTheDocument()
+    expect(screen.queryByText('2000')).not.toBeInTheDocument()
+    expect(screen.queryByText('2001')).not.toBeInTheDocument()
   })
 
-  it('deve renderizar a lista de conteúdos', () => {
+  it('renderiza ano e contagem de vitórias', () => {
     vi.mocked(useMovieWinCount).mockReturnValue({
       isLoading: false,
       data: {
@@ -40,14 +40,16 @@ describe('MovieWinCount Component', () => {
     render(<MovieWinCount />)
 
     expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
+    expect(screen.getByText('Year')).toBeInTheDocument()
+    expect(screen.getByText('Win Count')).toBeInTheDocument()
 
     mockMovies.forEach((movie) => {
-      expect(screen.getByText(movie.year)).toBeInTheDocument()
-      expect(screen.getByText(movie.winnerCount)).toBeInTheDocument()
+      expect(screen.getByText(String(movie.year))).toBeInTheDocument()
+      expect(screen.getByText(String(movie.winnerCount))).toBeInTheDocument()
     })
   })
 
-  it('deve renderizar a lista de conteúdos vazia', () => {
+  it('mostra cabeçalhos sem linhas quando não há anos', () => {
     vi.mocked(useMovieWinCount).mockReturnValue({
       isLoading: false,
       data: {
@@ -61,5 +63,7 @@ describe('MovieWinCount Component', () => {
 
     expect(screen.getByText('Year')).toBeInTheDocument()
     expect(screen.getByText('Win Count')).toBeInTheDocument()
+    expect(screen.queryByText('2000')).not.toBeInTheDocument()
+    expect(screen.queryByText('2001')).not.toBeInTheDocument()
   })
 })

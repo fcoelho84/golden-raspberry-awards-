@@ -12,3 +12,4 @@ Registros detalhados por sessão ficam em [`AI_Interactions/`](AI_Interactions/)
 | 2026-10-03 | README completo, plano e skill de persistência | [`AI_Interactions/2026-10-03-readme-plano-e-skill.md`](AI_Interactions/2026-10-03-readme-plano-e-skill.md) |
 | 2026-10-03 | Fix paginação da lista | [`AI_Interactions/2026-10-03-fix-list-pagination.md`](AI_Interactions/2026-10-03-fix-list-pagination.md) |
 | 2026-10-03 | Storybook só shared/ui e shared/hooks | [`AI_Interactions/2026-10-03-storybook-shared-only.md`](AI_Interactions/2026-10-03-storybook-shared-only.md) |
+| 2026-10-03 | Revisar testes (foco E2E) | [`AI_Interactions/2026-10-03-revisar-testes-seams.md`](AI_Interactions/2026-10-03-revisar-testes-seams.md) |

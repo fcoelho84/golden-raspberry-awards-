@@ -18,14 +18,15 @@ describe('ListFilters Component', () => {
     vi.useRealTimers()
   })
 
-  it('deve renderizar os campos de filtro de ano e vencedor', () => {
+  it('expõe os filtros de ano e vencedor com labels acessíveis', () => {
     render(<ListFilters />)
 
     expect(screen.getByLabelText(/by year/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/by winner/i)).toBeInTheDocument()
+    expect(navigate).not.toHaveBeenCalled()
   })
 
-  it('deve aplicar o ano só depois do debounce e voltar para a primeira página', () => {
+  it('aplica o ano só depois do debounce e volta para a primeira página', () => {
     render(<ListFilters />)
 
     const input = screen.getByLabelText(/Search by year/i)
@@ -46,7 +47,7 @@ describe('ListFilters Component', () => {
     })
   })
 
-  it('deve permitir alterar a opção no select de vencedor', () => {
+  it('aplica o filtro de vencedor e reseta para a primeira página', () => {
     render(<ListFilters />)
 
     const select: HTMLSelectElement = screen.getByLabelText(/Filter by winner/i)

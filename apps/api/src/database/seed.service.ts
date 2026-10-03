@@ -26,14 +26,22 @@ export class DatabaseSeedService implements OnApplicationBootstrap {
       winner: string;
     }>('src/database/Movielist.csv', async (row) => {
       try {
+        const title = row.title?.trim() ?? '';
+        const year = parseInt(row.year, 10);
+        const producersNames = this.csvParserService.splitLine(row.producers);
+
+        if (!title || !Number.isInteger(year) || producersNames.length === 0) {
+          throw new Error('Linha com campos essenciais inválidos');
+        }
+
         const studios = await this.getStudios(row.studios);
         const producers = await this.getProducers(row.producers);
 
         const {
           identifiers: [entity],
         } = await this.movieRepository.create({
-          title: row.title.trim(),
-          year: parseInt(row.year),
+          title,
+          year,
           winner: row.winner?.toLowerCase().trim() === 'yes',
         });
 

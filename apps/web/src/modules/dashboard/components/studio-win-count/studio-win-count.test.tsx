@@ -8,13 +8,13 @@ vi.mock('../../api/use-studio-win-count', () => ({
   useStudioWinCount: vi.fn(),
 }))
 
-const mockMovies = [
+const mockStudios = [
   { name: 'A', winCount: 1 },
   { name: 'B', winCount: 2 },
 ]
 
 describe('StudioWinCount Component', () => {
-  it('deve exibir o loading de carregamento', () => {
+  it('mostra loader sem estúdios enquanto carrega', () => {
     vi.mocked(useStudioWinCount).mockReturnValue({
       isLoading: true,
       data: undefined,
@@ -23,16 +23,16 @@ describe('StudioWinCount Component', () => {
     render(<StudioWinCount />)
 
     expect(screen.getByTestId('loader')).toBeInTheDocument()
-    expect(screen.getByText('Name')).toBeInTheDocument()
-    expect(screen.queryByText('Win Count')).toBeInTheDocument()
+    expect(screen.queryByText('A')).not.toBeInTheDocument()
+    expect(screen.queryByText('B')).not.toBeInTheDocument()
   })
 
-  it('deve renderizar a lista de conteúdos', () => {
+  it('renderiza nome e contagem de vitórias do estúdio', () => {
     vi.mocked(useStudioWinCount).mockReturnValue({
       isLoading: false,
       data: {
         data: {
-          studios: mockMovies,
+          studios: mockStudios,
         },
       },
     } as ReturnType<typeof useStudioWinCount>)
@@ -40,14 +40,16 @@ describe('StudioWinCount Component', () => {
     render(<StudioWinCount />)
 
     expect(screen.queryByTestId('loader')).not.toBeInTheDocument()
+    expect(screen.getByText('Name')).toBeInTheDocument()
+    expect(screen.getByText('Win Count')).toBeInTheDocument()
 
-    mockMovies.forEach((movie) => {
-      expect(screen.getByText(movie.name)).toBeInTheDocument()
-      expect(screen.getByText(movie.winCount)).toBeInTheDocument()
+    mockStudios.forEach((studio) => {
+      expect(screen.getByText(studio.name)).toBeInTheDocument()
+      expect(screen.getByText(String(studio.winCount))).toBeInTheDocument()
     })
   })
 
-  it('deve renderizar a lista de conteúdos vazia', () => {
+  it('mostra cabeçalhos sem linhas quando não há estúdios', () => {
     vi.mocked(useStudioWinCount).mockReturnValue({
       isLoading: false,
       data: {
@@ -61,5 +63,7 @@ describe('StudioWinCount Component', () => {
 
     expect(screen.getByText('Name')).toBeInTheDocument()
     expect(screen.getByText('Win Count')).toBeInTheDocument()
+    expect(screen.queryByText('A')).not.toBeInTheDocument()
+    expect(screen.queryByText('B')).not.toBeInTheDocument()
   })
 })
