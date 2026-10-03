@@ -1,0 +1,38 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Introduction" />
+
+# Storybook — kit shared
+
+Documentação visual do design system do front: só o que vive em `src/shared/ui` e `src/shared/hooks`.
+
+Módulos (`dashboard`, `movie-list`) são composições desses blocos e **não** entram no Storybook.
+
+## Como abrir
+
+```bash
+pnpm --filter web storybook
+```
+
+URL: `http://localhost:6006`.
+
+## UI (`shared/ui`)
+
+| Componente | Uso |
+|------------|-----|
+| Button | Ações e controles de paginação |
+| Input | Campos de texto e número |
+| Select | Seleção simples |
+| TableList | Linha/cabeçalho em grade |
+| Layout | Shell com menu e área principal |
+| Loader | Estado de carregamento |
+
+## Hooks (`shared/hooks`)
+
+| Hook | Uso |
+|------|-----|
+| useDebounce | Atrasa a execução de um callback (ex.: filtro de ano, 500 ms) |
+
+## Autodocs
+
+Cada story gera documentação automática (props e variantes). Abra um item em **Shared** na barra lateral.

@@ -1,6 +1,10 @@
-import React, { type PropsWithChildren } from 'react'
+import React from 'react'
+import type { PropsWithChildren } from 'react'
 
-interface Button extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+interface Button extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  disabled?: boolean
+  className?: string
+}
 
 export const Button: React.FC<PropsWithChildren<Button>> = (props) => {
   return (
